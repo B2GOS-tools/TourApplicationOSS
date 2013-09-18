@@ -1,0 +1,11 @@
+{
+  "host": "http://retail-owd.tefdigital.com",
+  "commercialsPath": "variants",
+  "variant": "${VARIANT}",
+  "restartAppPeriod": 5,
+  "checkNewImgsPeriod": 6,
+  "retryPeriodIfOffline": 10,
+  "defaultTimeout": 60000,
+  "slidesAutoplay": 8000,
+  "localSlides": "gphx/slides"
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<title>Tour app</title>
+
+		<script>
+
+		// This URL must be a full url.
+		var URL = "http://telefonicaid.github.io/TourApplicationOSS/downloads/${VARIANT}/build/";
+		var manifestUrl = URL+'package.manifest';
+
+		var req = navigator.mozApps.installPackage(manifestUrl);
+		req.onsuccess = function() {
+			console.log(this.result.origin);
+		};
+		req.onerror = function() {
+			console.log(this.error.name);
+		};
+
+
+
+		</script>
+	</head>
+
+	<body></body>
+</html>

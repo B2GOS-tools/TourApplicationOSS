@@ -1,0 +1,92 @@
+/*  Main UI declaration */
+body,
+html {
+	height: 100%;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	font: 10px/1em "MozTT", Sans-serif;
+	background: #000;
+}
+
+/* Hidden elements */
+.hidden {
+	opacity: 0!important;
+	pointer-events: none!important;
+}
+.bruteHidden { display: none!important; }
+
+.wrapper {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background: url(../gphx/ui/background.png) repeat left top / 50px;
+ }
+	.slide {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		transform: translate(0);
+		-moz-user-select: none;
+		pointer-events: none;
+		opacity: 0;
+		background: url(../gphx/ui/background.png) repeat left top / 50px;
+	}
+	.transition { transition: all 0.4s ease; }
+	.slide.next { z-index: 5; opacity: 0.6; transform: translateX(100%); }
+	.slide.current { z-index: 3; }
+	.slide.prev { z-index: 1; }
+	.slide.current,
+	.slide.prev { opacity: 1; }
+
+
+	.reload { position: absolute; left: 1rem; bottom: 1rem; z-index: 5; }
+
+
+/* Video fix */
+.slide.video { background: transparent no-repeat center / cover; }
+.slide.video .play {
+	background: url(../gphx/ui/play.png) no-repeat center / 13.7rem;
+	font-size: 0;
+	display: block;
+	width: 13.7rem;
+	height: 13.7rem;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -6.9rem 0 0 -6.9rem;
+}
+.slide.video.current .play { pointer-events: auto; }
+
+.slide.video .pause {
+	background: url(../gphx/ui/pause.png) no-repeat center / 3.3rem;
+	font-size: 0;
+	display: block;
+	width: 3.3rem;
+	height: 3.4rem;
+	position: absolute;
+	right: 1rem;
+	bottom: 1rem;
+	pointer-events: auto;
+	display: none;
+}
+
+.slide.video .play,
+.slide.video .pause {
+	outline: none;
+}
+
+.slide video { width: 100%; pointer-events: none; }
+.slide.active video { pointer-events: auto; }
+.slide.active .play { display: none; }
+.slide.active .pause { display: block; }
+
+/* Final actions */
+.slide .actions { pointer-events: none; }
+.slide .actions button { pointer-events: auto; }
+
+/* Options */
+.loading { transition: opacity 1s ease; }
