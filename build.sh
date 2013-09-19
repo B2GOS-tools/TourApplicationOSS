@@ -28,7 +28,7 @@ zipSize=`stat -c %s package.zip`
 
 cd $INITIALWD
 
-cat package.manifest | sed 's/${VARIANT}/'${variant//\//\\\/}'/' | sed 's/${ZIPSIZE}/'${zipSize}'/' >> ${variant}/build/package.manifest
+cat package.manifest | sed 's/${VARIANT}/'${variant//\//\\\/}'/' >> ${variant}/build/package.manifest
 
 cat index.html | sed 's/${VARIANT}/'${variant//\//\\\/}'/' >> ${variant}/index.html
 

@@ -6,27 +6,20 @@
 		<title>Tour app</title>
 
 		<script>
-		// Turn it to false to always install 'normal' package
-		var supportHIDPI = true;
-		var isFFOS = ("mozApps" in navigator && navigator.userAgent.search("Mobile") != -1);
 
-		if ( isFFOS ) {
+		// This URL must be a full url.
+		var URL = "http://telefonicaid.github.io/TourApplicationOSS/downloads/${VARIANT}/build/";
+		var manifestUrl = URL+'package.manifest';
 
-			// This URL must be a full url.
-			var URL = "http://telefonicaid.github.io/TourApplicationOSS/downloads/${VARIANT}/build/";
-			var manifestUrl = URL+'package.manifest';
+		var req = navigator.mozApps.installPackage(manifestUrl);
+		req.onsuccess = function() {
+			console.log(this.result.origin);
+		};
+		req.onerror = function() {
+			console.log(this.error.name);
+		};
 
-			var req = navigator.mozApps.installPackage(manifestUrl);
-			req.onsuccess = function() {
-				console.log(this.result.origin);
-			};
-			req.onerror = function() {
-				console.log(this.error.name);
-			};
 
-		} else {
-			window.location.href = window.location.href+"app"
-		}
 
 		</script>
 	</head>

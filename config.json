@@ -1,6 +1,6 @@
 {
-  "host": "http://retail-owd.tefdigital.com",
-  "commercialsPath": "variants",
+  "host": "http://telefonicaid.github.io/TourApplicationOSS",
+  "commercialsPath": "commercial",
   "variant": "${VARIANT}",
   "restartAppPeriod": 5,
   "checkNewImgsPeriod": 6,
