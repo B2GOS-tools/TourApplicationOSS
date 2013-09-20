@@ -1,3 +1,4 @@
 AddType 'application/x-web-app-manifest+json' webapp
 Header set Access-Control-Allow-Origin: *
 AddType application/json .json
+SetEnv no-gzip 1
