@@ -24,11 +24,14 @@ zip -r ../package.zip *
 cd ..
 rm -rf package
 
-zipSize=`stat -c %s package.zip`
+case `uname -s` in
+  Darwin) zipSize=`stat -f %z package.zip` ;;
+  *) zipSize=`stat -c %s package.zip` ;;
+esac
 
 cd $INITIALWD
 
-cat package.manifest | sed 's/${VARIANT}/'${variant//\//\\\/}'/' >> ${variant}/build/package.manifest
+cat package.manifest | sed 's/${VARIANT}/'${variant//\//\\\/}'/' | sed 's/${ZIPSIZE}/'${zipSize}'/' >> ${variant}/build/package.manifest
 
 cat index.html | sed 's/${VARIANT}/'${variant//\//\\\/}'/' >> ${variant}/index.html
 

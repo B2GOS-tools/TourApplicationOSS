@@ -46,13 +46,13 @@
 			if (i == 0) {
 				info.position = "current";
 				info.viewport= "";
-			}
-
-			// Set last slide
-			if (i == media.length-1) {
-				info.position = "prev";
-				info.viewport= "";
-			}
+			} else {
+        // Set last slide
+        if (i == media.length-1) {
+          info.position = "prev";
+          info.viewport= "";
+        }
+      }
 
 			// Set video tpl or image one
 			if (media[i].search(".ogv") == -1) {

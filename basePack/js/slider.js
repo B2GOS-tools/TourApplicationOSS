@@ -28,6 +28,10 @@ Slider = function() {
 
 	// Move to next slide
 	Slider.nextSlide = function() {
+    if (!next) {
+      keepSlide();
+      return;
+    }
 		next.style.transform = "";
 		next.style.opacity = "";
 		current.style.opacity = "";
@@ -65,6 +69,10 @@ Slider = function() {
 	}
 
 	function prevSlide() {
+    if (!prev) {
+      keepSlide();
+      return;
+    }
 		current.style.transform = "";
 		current.style.opacity = "";
 		prev.style.opacity = "";
@@ -92,46 +100,82 @@ Slider = function() {
 	}
 
 	// Play slidevideo when on autoplay mode
-	function playSlideVideo() {
-		clearInterval(Slider.repeat);
-		var video = next.querySelector("video");
-		var reference = next.querySelector(".play");
+	function playSlideVideo(cb) {
+		var video = current.querySelector("video");
+		var reference = current.querySelector(".play");
 		/*
 		  We should set the video at begining but:
 		  video.currentTime = 0; is not working
 		 */
+    video.load();
 		uiHandlers.playVideo(reference);
 
 		video.addEventListener("ended", function end(e) {
 			uiHandlers.finishVideo(reference);
 			Slider.refreshNodes();
 			video.removeEventListener("ended", end);
+      if (cb) {
+        cb();
+      }
 		});
 	}
 
 	// Enters autoplaymode
 	Slider.autoPlay = function() {
-		clearInterval(Slider.repeat);
-		Slider.repeat = setInterval(function() {
-			dom.context.classList.add("autoplay");
-			Slider.refreshNodes();
-			next.classList.add("transition");
-			next.addEventListener("transitionend", function end() {
-				this.classList.remove("transition");
-				next.removeEventListener("transitionend", end);
-			});
-			Slider.nextSlide();
-			// If has a video then play it
-			if (next.classList.contains("video")) {
-				playSlideVideo();
-			}
-		}, delay);
+
+    clearTimeout(Slider.repeat);
+    Slider.playing = true;
+
+	  dom.context.classList.add("autoplay");
+    Slider.refreshNodes();
+
+    function transitionToNextSlide() {
+      if (next) {
+        next.classList.add("transition");
+        next.addEventListener("transitionend", function end() {
+          this.classList.remove("transition");
+          next.removeEventListener("transitionend", end);
+        });
+        Slider.nextSlide();
+			  Slider.refreshNodes();
+      }
+      
+      // Call autoPlay again if we are still playing
+      if (Slider.playing) {
+        Slider.autoPlay();
+      }
+    }
+
+    // if current slide is a video play it and transition when the video is over
+    if (current.classList.contains("video")) {
+      playSlideVideo(function() {
+        transitionToNextSlide();
+      });
+    } else {
+      // if it is not a video we transition after delay
+      Slider.repeat = setTimeout(function() {
+        transitionToNextSlide();
+      }, delay);
+    }
 	};
+
+  Slider.pausePlay = function() {
+    clearTimeout(Slider.repeat);
+    Slider.repeat = setTimeout(function() {
+      Slider.nextSlide();
+      Slider.autoPlay(); 
+    }, delay);
+  };
+
+  Slider.stopPlay = function() {
+    clearTimeout(Slider.repeat);
+    Slider.playing = false;
+  };
 
 	function move(e) {
 		coordinates.current = (e.touches) ? e.touches[0].pageX : e.clientX;
 
-		if (coordinates.init - coordinates.current >= 0) {
+		if (next && coordinates.init - coordinates.current >= 0) {
 			// To start |<=|
 			coordinates.direction = "start";
 			var amount = window.innerWidth - (coordinates.init - coordinates.current);
@@ -149,7 +193,7 @@ Slider = function() {
 	}
 
 	function start() {
-		clearInterval(Slider.repeat);
+		//clearInterval(Slider.repeat);
 
 		// Get actual prev, current and next slides
 		Slider.refreshNodes();
@@ -172,7 +216,6 @@ Slider = function() {
 	function end() {
 
 		// resetSlides();
-		Slider.autoPlay();
 
 		// // Swipe start to end |=>|
 		if ( coordinates.direction == "end" ) {
@@ -187,7 +230,7 @@ Slider = function() {
 				//Don't move |=|
 				console.log("=")
 				// What current is next in the opposite direction
-				next = dom.context.querySelector(".current");
+				//next = dom.context.querySelector(".current");
 				keepSlide();
 			}
 		} else {
@@ -204,6 +247,7 @@ Slider = function() {
 				//Next slide
 				console.log("<=")
 				Slider.nextSlide();
+		    Slider.autoPlay();
 			}
 
 		}

@@ -9,10 +9,6 @@
 		dom.context = document.getElementById("canvas");
 		dom.loading = document.getElementById("loading");
 
-		// Expose playVideo
-		uiHandlers.playVideo = {};
-		uiHandlers.finishVideo = {};
-
 		function bindEvents() {
 			dom.loading.classList.add("hidden");
 			dom.play = document.querySelectorAll(".play");
@@ -20,26 +16,6 @@
 
 			// Initialize slider
 			Slider();
-
-			uiHandlers.playVideo = function(trigger) {
-				clearInterval(Slider.repeat);
-				var video = trigger.parentNode.querySelector("video");
-				trigger.parentNode.classList.add("active");
-				video.play();
-				video.addEventListener("ended", function end() {
-					Slider.refreshNodes();
-					Slider.nextSlide();
-					uiHandlers.finishVideo(trigger);
-					video.removeEventListener("ended", end);
-				})
-			}
-
-			uiHandlers.finishVideo = function(trigger) {
-				Slider.autoPlay();
-				var video = trigger.parentNode.querySelector("video");
-				video.pause();
-				trigger.parentNode.classList.remove("active");
-			}
 
 			// Play video
 			for (var i = 0; i < dom.play.length; i++) {
@@ -99,5 +75,20 @@
 		}
 
 	}
+
+  uiHandlers.playVideo = function(trigger) {
+    clearTimeout(Slider.repeat);
+    var video = trigger.parentNode.querySelector("video");
+    trigger.parentNode.classList.add("active");
+    video.play();
+  };
+
+  uiHandlers.finishVideo = function(trigger) {
+    var video = trigger.parentNode.querySelector("video");
+    video.pause();
+    trigger.parentNode.classList.remove("active");
+    Slider.pausePlay();
+  };
+
 })();
 
